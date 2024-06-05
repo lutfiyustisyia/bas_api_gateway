@@ -6,6 +6,7 @@ import (
 	"api_gateway/handler"
 )
 
+// main  excercise
 func main() {
 	r := gin.Default()
 
