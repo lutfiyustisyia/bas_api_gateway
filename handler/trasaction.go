@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"api_gateway/model"
+	"api_gateway/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,6 +10,7 @@ import (
 
 type TransactionInterface interface {
 	TransferBank(*gin.Context)
+	CreateTransaction(*gin.Context)
 }
 
 type transactionImplement struct{}
@@ -28,6 +31,34 @@ func (b *transactionImplement) TransferBank(g *gin.Context) {
 	}
 
 	g.JSON(http.StatusOK, gin.H{
-		"message": "transaksi berhasil",
+		"message": "Hello guys this API rest for later",
+	})
+}
+
+func (a *transactionImplement) CreateTransaction(g *gin.Context) {
+
+	BodyPayload := model.Account{}
+	err := g.BindJSON(&BodyPayload)
+
+	if err != nil {
+		g.AbortWithError(http.StatusBadRequest, err)
+	}
+
+	orm := utils.NewDatabase().Orm
+	db, _ := orm.DB()
+
+	defer db.Close()
+	result := orm.Create(&BodyPayload)
+
+	if result.Error != nil {
+		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": result.Error,
+		})
+		return
+	}
+
+	g.JSON(http.StatusOK, gin.H{
+		"message": "Get account successfully",
+		"data":    BodyPayload,
 	})
 }
