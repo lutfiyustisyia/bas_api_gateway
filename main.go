@@ -6,7 +6,7 @@ import (
 	"api_gateway/handler"
 )
 
-// main  excercise
+// main  excercise 5 juni 2024
 func main() {
 	r := gin.Default()
 
