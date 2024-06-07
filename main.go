@@ -17,7 +17,7 @@ import (
 // main  excercise 5 juni 2024
 func main() {
 	r := gin.Default()
-	addServiceTransactionOpt := client.WithAddress(":8080")
+	addServiceTransactionOpt := client.WithAddress(":9000")
 	clientSrvTransaction := grpc.NewClient()
 	srvTransaction := micro.NewService(
 		micro.Client(clientSrvTransaction),
@@ -38,8 +38,8 @@ func main() {
 
 	transactionRoute := r.Group("/transaction")
 	transactionRoute.GET("/get", func(g *gin.Context) {
-		ClientResponse, err := proto.NewServiceTransactionService("service-transaction", srvTransaction.Client()).Call(context.Background(), &proto.CallRequest{
-			Name: "Lupi",
+		ClientResponse, err := proto.NewServiceTransactionService("service-transaction", srvTransaction.Client()).Login(context.Background(), &proto.LoginRequest{
+			Username: "Lupi",
 		}, addServiceTransactionOpt)
 		if err != nil {
 			g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

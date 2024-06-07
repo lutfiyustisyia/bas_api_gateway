@@ -4,8 +4,8 @@ import "time"
 
 type Transaction struct {
 	Id              string `gorm:"primaryKey"`
-	account_id      string `gorm:"foreignkey"`
-	bank_id         string `gorm:"foreignkey"`
+	Account_id      string `gorm:"foreignkey"`
+	Bank_id         string `gorm:"foreignkey"`
 	Amount          int    `gorm:"column:amount"`
 	TransactionDate *time.Time
 }

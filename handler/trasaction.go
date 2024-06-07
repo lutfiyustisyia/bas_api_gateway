@@ -23,7 +23,7 @@ type BodyPayloadTransaction struct{}
 
 func (b *transactionImplement) TransferBank(g *gin.Context) {
 
-	bodyPayloadTxn := BodyPayloadTransaction{}
+	bodyPayloadTxn := model.Transaction{}
 	err := g.BindJSON(&bodyPayloadTxn)
 
 	if err != nil {
@@ -32,6 +32,7 @@ func (b *transactionImplement) TransferBank(g *gin.Context) {
 
 	g.JSON(http.StatusOK, gin.H{
 		"message": "Hello guys this API rest for later",
+		"data":    bodyPayloadTxn,
 	})
 }
 

@@ -1,7 +1,7 @@
 package model
 
 type Bank struct {
-	bank_code string `gorm:"primaryKey"`
+	Bank_code string `gorm:"primaryKey"`
 	Name      string
 	Address   string
 }
