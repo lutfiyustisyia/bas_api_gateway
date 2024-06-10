@@ -10,7 +10,6 @@ import (
 
 type TransactionInterface interface {
 	TransferBank(*gin.Context)
-	CreateTransaction(*gin.Context)
 }
 
 type transactionImplement struct{}
@@ -25,22 +24,6 @@ func (b *transactionImplement) TransferBank(g *gin.Context) {
 
 	bodyPayloadTxn := model.Transaction{}
 	err := g.BindJSON(&bodyPayloadTxn)
-
-	if err != nil {
-		g.AbortWithError(http.StatusBadRequest, err)
-	}
-
-	g.JSON(http.StatusOK, gin.H{
-		"message": "Hello guys this API rest for later",
-		"data":    bodyPayloadTxn,
-	})
-}
-
-func (a *transactionImplement) CreateTransaction(g *gin.Context) {
-
-	BodyPayload := model.Account{}
-	err := g.BindJSON(&BodyPayload)
-
 	if err != nil {
 		g.AbortWithError(http.StatusBadRequest, err)
 	}
@@ -49,8 +32,8 @@ func (a *transactionImplement) CreateTransaction(g *gin.Context) {
 	db, _ := orm.DB()
 
 	defer db.Close()
-	result := orm.Create(&BodyPayload)
 
+	result := orm.Create(&bodyPayloadTxn)
 	if result.Error != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": result.Error,
@@ -59,7 +42,55 @@ func (a *transactionImplement) CreateTransaction(g *gin.Context) {
 	}
 
 	g.JSON(http.StatusOK, gin.H{
-		"message": "Get account successfully",
-		"data":    BodyPayload,
+		"message": "Transaction Succesfull",
+		"data":    bodyPayloadTxn,
+	})
+}
+
+func GetAccounts(c *gin.Context) {
+	orm := utils.NewDatabase().Orm
+	db, err := orm.DB()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to connect to database",
+		})
+		return
+	}
+	defer db.Close()
+
+	var accounts []model.Account
+	if err := orm.Find(&accounts).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": accounts,
+	})
+}
+
+func GetBanks(c *gin.Context) {
+	orm := utils.NewDatabase().Orm
+	db, err := orm.DB()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to connect to database",
+		})
+		return
+	}
+	defer db.Close()
+
+	var banks []model.Bank
+	if err := orm.Find(&banks).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": banks,
 	})
 }

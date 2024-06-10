@@ -12,11 +12,21 @@ import (
 
 	"api_gateway/handler"
 	"api_gateway/proto"
+
+	"github.com/gin-contrib/cors"
 )
 
 // main  excercise 5 juni 2024
 func main() {
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:  []string{"*"},
+		AllowMethods:  []string{"*"},
+		AllowHeaders:  []string{"*"},
+		ExposeHeaders: []string{"*"},
+	}))
+
 	addServiceTransactionOpt := client.WithAddress(":9000")
 	clientSrvTransaction := grpc.NewClient()
 	srvTransaction := micro.NewService(

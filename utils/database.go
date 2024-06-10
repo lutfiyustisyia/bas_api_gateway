@@ -12,7 +12,7 @@ type DBBas struct {
 }
 
 func NewDatabase() *DBBas {
-	dsn := "host=146.190.84.201 user=training_5 password=12345678 dbname=training_5 port=3002 sslmode=disable TimeZone=Asia/Jakarta"
+	dsn := "host=146.190.84.201 user=training_11 password=12345678 dbname=training_11 port=3002 sslmode=disable TimeZone=Asia/Jakarta"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
